@@ -5,7 +5,7 @@ using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 var kernelBuilder = Kernel.CreateBuilder();
 kernelBuilder.Plugins.AddFromType<AgentFunction>();
-kernelBuilder.AddOpenAIChatCompletion("kimi-k2-0711-preview", new Uri("https://api.token-ai.cn/v1"), "sk-EUQ87vmmEuXDqJ633MpDr1Y66Kheqy8BdPx7XN");
+kernelBuilder.AddOpenAIChatCompletion("kimi-k2-0711-preview", new Uri("https://api.token-ai.cn/v1"), "您的密钥");
 var kernel = kernelBuilder.Build();
 
 // 让他帮我们搜索一些网络资料总结

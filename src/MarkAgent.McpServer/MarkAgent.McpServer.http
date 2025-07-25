@@ -1,0 +1,6 @@
+@MarkAgent.McpServer_HostAddress = http://localhost:5157
+
+GET {{MarkAgent.McpServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

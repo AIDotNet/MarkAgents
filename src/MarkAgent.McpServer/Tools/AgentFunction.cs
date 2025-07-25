@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using ModelContextProtocol.Server;
 
-namespace AgentMCP.MCP;
+namespace MarkAgent.Core.Tools;
 
 [McpServerToolType]
 public class AgentFunction

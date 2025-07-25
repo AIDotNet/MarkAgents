@@ -1,0 +1,21 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/draft/2025-07-09/server.json",
+  "description": "给AI提供TODO规划的能力，增强AI的任务管理和规划能力。",
+  "name": "io.github.AIDotNet/MarkAgent.McpServer",
+  "packages": [
+    {
+      "registry_name": "nuget",
+      "name": "MarkAgent.McpServer",
+      "version": "0.1.0-beta",
+      "package_arguments": [],
+      "environment_variables": []
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/AIDotNet/MarkAgent.McpServer",
+    "source": "github"
+  },
+  "version_detail": {
+    "version": "0.1.0-beta"
+  }
+}

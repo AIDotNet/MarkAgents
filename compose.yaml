@@ -1,0 +1,9 @@
+services:
+  agentmcp:
+    image: agentmcp
+    build:
+      context: .
+      dockerfile: AgentMCP/Dockerfile
+    ports:
+        - "18183:8080"
+

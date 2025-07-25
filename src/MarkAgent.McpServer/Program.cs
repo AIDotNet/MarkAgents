@@ -1,24 +1,25 @@
-using MarkAgent.Core.Tools;
+using Microsoft.Extensions.Hosting;
+using ModelContextProtocol.Sdk.Server;
+using MarkAgent.McpServer;
+using MarkAgent.Infrastructure.Extensions;
+using MarkAgent.Application.Extensions;
+using MarkAgent.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = Host.CreateEmptyApplicationBuilder(settings: null);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// Add database
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite("Data Source=markagent.db"));
 
+// Add custom services
+builder.Services.AddInfrastructureServices();
+builder.Services.AddApplicationServices();
+
+// Configure MCP Server with official SDK
 builder.Services
     .AddMcpServer()
     .WithStdioServerTransport()
-    .WithTools<AgentFunction>();
+    .WithTools<McpTodoServer>();
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
-app.MapMcp("/mcp");
-
-app.Run();
+await builder.Build().RunAsync();

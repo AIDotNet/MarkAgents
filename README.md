@@ -1,307 +1,212 @@
-# 使用Semantic Kernel实现Claude Code的Agents TODO能力
+# MarkAgent MCP Server
 
-## 引言
+**MarkAgent.McpServer** 是一个基于 Model Context Protocol (MCP) 的智能任务管理服务器。它为 AI 助手提供了强大的 TODO 规划和任务管理能力，帮助 AI 更好地组织和跟踪复杂的多步骤任务。
 
-在现代软件开发中，AI辅助编程工具正在成为开发者不可或缺的伙伴。Claude Code作为Anthropic推出的先进编程助手，其强大的TODO任务管理和智能代理（Agents）功能为开发者提供了卓越的项目管理和代码开发体验。本文将深入探讨如何使用Microsoft Semantic Kernel框架来实现类似Claude Code的TODO任务管理能力，让开发者能够在.NET生态系统中构建属于自己的智能编程助手。
+## 🌟 功能特性
 
-## Claude Code的TODO功能深度解析
+- **智能任务规划**: 自动将复杂任务分解为可管理的子任务
+- **实时状态跟踪**: 支持 pending、in_progress、completed 三种任务状态
+- **优先级管理**: 支持 high、medium、low 三个优先级等级
+- **彩色控制台输出**: 根据优先级和状态显示不同颜色的任务信息
+- **MCP 标准兼容**: 完全符合 Model Context Protocol 规范
+- **易于集成**: 支持 VS Code、Visual Studio 等主流 IDE
 
-### 1. 核心架构与设计理念
+## 🎯 使用场景
 
-Claude Code采用了基于任务代理（Task Agents）的架构设计，其TODO功能不仅仅是简单的任务列表管理，更是一个智能的任务编排和执行系统：
+### 何时使用 TodoWrite 工具：
 
-**任务代理工具（Task Agent Tools）**
-- **并行处理能力**：Claude Code通过Task工具能够将任务委派给子代理进行高效的并行处理
-- **智能任务分解**：支持将复杂任务自动分解为多个可执行的子任务
-- **状态管理**：提供pending、in_progress、completed三种状态的精确跟踪
+1. **复杂多步骤任务** - 需要 3 个或更多不同步骤的任务
+2. **非平凡复杂任务** - 需要仔细规划或多个操作的任务
+3. **用户明确请求** - 用户直接要求使用 todo 列表
+4. **多个任务** - 用户提供任务列表（编号或逗号分隔）
+5. **接收新指令后** - 立即将用户需求捕获为 todos
+6. **开始工作时** - 在开始工作前标记为 in_progress
+7. **完成任务后** - 标记为完成并添加新的后续任务
 
-**7并行任务方法**
-Claude Code实现了一套标准化的并行任务处理流程：
-1. **组件创建** - 处理UI组件和业务逻辑组件的创建
-2. **样式处理** - 管理CSS/样式相关的任务
-3. **测试编写** - 自动生成和执行测试用例
-4. **类型定义** - 处理TypeScript类型定义和接口
-5. **工具函数** - 创建辅助函数和钩子
-6. **系统集成** - 处理路由、导入导出等系统级集成
-7. **配置管理** - 处理package.json、文档等配置文件
+### 何时不使用：
 
-### 2. 智能任务编排特性
+1. 只有单个直接任务
+2. 任务过于简单，跟踪无意义
+3. 可在 3 个简单步骤内完成
+4. 纯对话或信息性任务
 
-**自动任务识别**
-- 复杂多步骤任务（3个或更多步骤）自动创建TODO
-- 非平凡任务需要仔细规划时主动建议TODO管理
-- 用户提供多个任务时智能拆分和组织
+## 📦 安装和配置
 
-**任务状态流转**
-- 实时状态更新和进度跟踪
-- 智能错误处理和任务阻塞检测
-- 任务完成后自动标记和后续任务发现
+这个 MCP 服务器使用 C# MCP 服务器项目模板创建，展示了如何轻松创建 MCP 服务器并将其发布为 NuGet 包。
 
-**上下文感知**
-- 基于项目结构和技术栈的智能任务建议
-- 与开发工作流的深度集成（git、构建、测试）
-- 支持团队协作的任务共享机制
+查看完整指南：[aka.ms/nuget/mcp/guide](https://aka.ms/nuget/mcp/guide)
 
-## MarkAgents项目：Semantic Kernel实现方案
+**注意**: 此模板目前处于早期预览阶段。如有反馈，请参与[简短调查](http://aka.ms/dotnet-mcp-template-survey)。
 
-### 1. 项目架构分析
+## 🚀 发布前检查清单
 
-MarkAgents项目采用了现代化的.NET 9.0架构，通过Semantic Kernel框架实现了对Claude Code TODO功能的本土化实现：
+- ✅ 使用下面的步骤在本地测试 MCP 服务器
+- ✅ 更新 .csproj 文件中的包元数据，特别是 `<PackageId>`（已设置为 `MarkAgent.McpServer`）
+- ✅ 更新 `.mcp/server.json` 以声明 MCP 服务器的输入
+  - 查看[配置输入](https://aka.ms/nuget/mcp/guide/configuring-inputs)了解更多详情
+- 使用 `dotnet pack` 打包项目
 
-**技术栈选型**
-```xml
-<TargetFramework>net9.0</TargetFramework>
-<PackageReference Include="Microsoft.SemanticKernel.Abstractions" Version="1.60.0" />
-<PackageReference Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.60.0" />
-<PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.60.0" />
-```
+`bin/Release` 目录将包含可以[发布到 NuGet.org](https://learn.microsoft.com/nuget/nuget-org/publish-a-package) 的包文件 (.nupkg)。
 
-**核心组件设计**
-- `AgentFunction.cs:13-569`: 主要的智能代理函数实现
-- `TodoInput.cs:1-39`: TODO数据模型和状态管理
-- `Program.cs:1-60`: 应用程序入口和配置
+## 🛠️ 本地开发
 
-### 2. TODO功能核心实现
+要从源代码本地测试此 MCP 服务器（无需使用构建的 MCP 服务器包），您可以配置 IDE 直接使用 `dotnet run` 运行项目。
 
-#### 数据模型设计（TodoInput.cs:1-39）
-
-项目定义了完整的TODO数据结构：
-
-```csharp
-public sealed class TodoInputItem
+```json
 {
-    [JsonPropertyName("content")] public required string Content { get; set; }
-    [JsonPropertyName("status")] public required TodoInputItemStatus Status { get; set; }
-    [JsonPropertyName("priority")] public required Priority Priority { get; set; }
-    [JsonPropertyName("id")] public required string Id { get; set; }
-}
-
-public enum TodoInputItemStatus
-{
-    Pending, InProgress, Completed
-}
-
-public enum Priority  
-{
-    Low, Medium, High
-}
-```
-
-这种设计完全对标了Claude Code的TODO状态模型，支持优先级管理和状态流转。
-
-#### 智能TODO管理实现（AgentFunction.cs:239-569）
-
-**核心功能特性：**
-
-1. **智能任务检测**：通过详细的描述文档（AgentFunction.cs:242-417），系统能够自动识别何时需要创建TODO列表
-2. **可视化反馈**：控制台彩色显示不同优先级的任务（AgentFunction.cs:432-451）
-3. **状态同步**：实时更新任务状态并提供系统级反馈（AgentFunction.cs:519-546）
-
-**关键实现亮点：**
-
-```csharp
-[KernelFunction, Description("Use this tool to create and manage structured task lists...")]
-public string TodoWrite([Description("The updated todo list")] TodoInputItem[] todos)
-{
-    if (_input == null)
-    {
-        _input = new List<TodoInputItem>(todos);
-        Console.OutputEncoding = System.Text.Encoding.UTF8;
-        // 彩色控制台输出逻辑
-        foreach (var item in todos)
-        {
-            SetConsoleColorByPriority(item.Priority);
-            Console.Write("□ ");
-            Console.Write(item.Content);
-            Console.WriteLine();
-            Console.ResetColor();
-        }
-        return GenerateInitialTodoMessage(todos);
+  "servers": {
+    "MarkAgent.McpServer": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "<项目目录路径>"
+      ]
     }
-    // 任务状态更新逻辑...
+  }
 }
 ```
 
-### 3. 与Claude Code对比分析
+### 本地开发配置示例
 
-| 特性 | Claude Code | MarkAgents实现 | 优势分析 |
-|------|-------------|----------------|----------|
-| **任务状态管理** | pending/in_progress/completed | 完全一致的状态模型 | ✅ 100%兼容 |
-| **优先级系统** | high/medium/low | 三级优先级+彩色显示 | ✅ 增强视觉体验 |
-| **并行处理** | 子代理并行执行 | Semantic Kernel插件架构 | ✅ .NET生态集成 |
-| **智能检测** | 自动识别复杂任务 | 规则引擎+描述匹配 | ✅ 可定制规则 |
-| **系统集成** | 终端原生集成 | 控制台+JSON序列化 | ✅ 跨平台支持 |
-
-## 技术实现深度剖析
-
-### 1. Semantic Kernel架构优势
-
-**插件系统设计**
-```csharp
-var kernelBuilder = Kernel.CreateBuilder();
-kernelBuilder.Plugins.AddFromType<AgentFunction>();
-kernelBuilder.AddOpenAIChatCompletion("kimi-k2-0711-preview", 
-    new Uri("https://api.token-ai.cn/v1"), "sk-xxx");
-```
-
-Semantic Kernel的插件架构允许开发者：
-- 模块化功能开发
-- 热插拔功能组件
-- 统一的函数调用接口
-- 多模型支持（OpenAI、Azure OpenAI、本地模型）
-
-**系统提示词工程（Program.cs:22-39）**
-```csharp
-history.AddSystemMessage(@"EXECUTION WORKFLOW - STRICTLY FOLLOW THIS ORDER:
-1. FIRST: Create TODO list using TodoWrite tool for EVERY user query (MANDATORY)
-2. SECOND: Mark first TODO as in_progress and begin work  
-3. THIRD: Execute the specific task described in the TODO
-4. FOURTH: Mark TODO as completed ONLY after providing actual results
-5. REPEAT: Move to next TODO item until all are completed");
-```
-
-这种强制性工作流程确保了任务管理的一致性和完整性。
-
-### 2. 智能网络搜索集成（AgentFunction.cs:27-237）
-
-项目还实现了类似Claude Code的网络搜索能力：
-
-**多搜索引擎支持**
-```csharp
-var searchEngines = new[]
+```json
 {
-    "https://search.brave.com/api/search?q={0}&format=json",
-    "https://searx.be/search?q={0}&format=json", 
-    "https://paulgo.io/search?q={0}&format=json",
-    "https://api.duckduckgo.com/?q={0}&format=json"
-};
+  "servers": {
+    "MarkAgent.McpServer": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "C:\\code\\Agent\\MarkAgent.McpServer"
+      ]
+    }
+  }
+}
 ```
 
-**智能内容提取**
-- HTML标签清理和内容标准化
-- 域名过滤（白名单/黑名单）
-- 结果去重和质量评估
-- 分块内容预览
+## 🧪 测试 MCP 服务器
 
-### 3. 控制台用户体验优化
+配置完成后，您可以向支持 MCP 的 AI 助手请求任务管理功能。例如：
 
-**彩色输出系统**
-```csharp
-if (item.Priority == Priority.High)
-    Console.ForegroundColor = ConsoleColor.Red;
-else if (item.Priority == Priority.Medium) 
-    Console.ForegroundColor = ConsoleColor.Yellow;
-else
-    Console.ForegroundColor = ConsoleColor.Green;
+### 测试示例
 
-if (item.Status == TodoInputItemStatus.Pending)
-    Console.Write("□ ");
-else if (item.Status == TodoInputItemStatus.InProgress)
-    Console.Write("■ ");  
-else if (item.Status == TodoInputItemStatus.Completed)
-    Console.Write("✓ ");
+1. **复杂任务规划**：
+   ```
+   "帮我实现一个用户注册系统，包括前端表单、后端验证、数据库存储和邮件验证功能"
+   ```
+   
+2. **多步骤任务**：
+   ```
+   "重构这个项目的认证模块，确保运行测试并构建成功"
+   ```
+
+AI 助手将自动使用 `TodoWrite` 工具创建结构化的任务列表，并在执行过程中实时更新任务状态。
+
+### 预期行为
+
+- AI 助手会自动识别复杂任务
+- 创建带有优先级的任务列表
+- 在控制台中显示彩色的任务状态
+- 实时跟踪任务进度
+
+## 📦 发布到 NuGet.org
+
+1. 运行 `dotnet pack -c Release` 创建 NuGet 包
+2. 使用以下命令发布到 NuGet.org：
+   ```bash
+   dotnet nuget push bin/Release/*.nupkg --api-key <your-api-key> --source https://api.nuget.org/v3/index.json
+   ```
+
+### 当前包信息
+
+- **包 ID**: `MarkAgent.McpServer`
+- **版本**: `0.1.0-beta`
+- **描述**: 给AI提供TODO规划的能力，增强AI的任务管理和规划能力
+- **标签**: AI, MCP, server, stdio, Todo
+
+## 🚀 从 NuGet.org 使用 MCP 服务器
+
+MCP 服务器包发布到 NuGet.org 后，您可以在首选 IDE 中配置它。VS Code 和 Visual Studio 都使用 `dnx` 命令从 NuGet.org 下载和安装 MCP 服务器包。
+
+### IDE 配置
+
+- **VS Code**: 创建 `<工作区目录>/.vscode/mcp.json` 文件
+- **Visual Studio**: 创建 `<解决方案目录>\.mcp.json` 文件
+
+### 配置示例
+
+对于 VS Code 和 Visual Studio，配置文件使用以下服务器定义：
+
+```json
+{
+  "servers": {
+    "MarkAgent.McpServer": {
+      "type": "stdio",
+      "command": "dnx",
+      "args": [
+        "MarkAgent.McpServer",
+        "--version",
+        "0.1.0-beta",
+        "--yes"
+      ]
+    }
+  }
+}
 ```
 
-这种设计提供了直观的视觉反馈，让开发者能够快速了解任务状态。
+### Claude Code 集成
 
-## 实际应用场景与最佳实践
+如果您使用 Claude Code，可以通过以下方式配置：
 
-### 1. 复杂项目开发场景
-
-**微服务架构开发**
-```
-高优先级任务：
-■ 设计API网关路由配置
-□ 实现用户认证服务
-□ 创建订单处理微服务
-
-中优先级任务：  
-□ 编写单元测试用例
-□ 配置Docker容器化
-□ 设置CI/CD流水线
-
-低优先级任务：
-□ 编写API文档
-□ 性能测试和优化
+```json
+{
+  "servers": {
+    "mark-agent": {
+      "type": "stdio", 
+      "command": "dnx",
+      "args": [
+        "MarkAgent.McpServer",
+        "--version", 
+        "0.1.0-beta",
+        "--yes"
+      ]
+    }
+  }
+}
 ```
 
-**前端框架集成**
-- 自动检测React/Vue组件开发任务
-- 智能拆分样式、逻辑、测试任务
-- 与构建工具集成的任务流程
+## 📚 更多信息
 
-### 2. 团队协作优化
+### 技术架构
 
-**任务共享机制**
-通过JSON序列化，团队成员可以：
-- 导出任务列表到文件
-- 在团队间共享复杂项目的任务分解
-- 建立标准化的开发流程模板
+本项目基于以下技术栈构建：
 
-**代码审查集成**
-- 自动生成代码审查检查清单
-- 与Git工作流集成的任务管理
-- 基于提交历史的任务完成度分析
+- **.NET 8.0**: 现代化的 .NET 运行时
+- **ModelContextProtocol SDK**: [ModelContextProtocol](https://www.nuget.org/packages/ModelContextProtocol) C# SDK
+- **Microsoft.Extensions.Hosting**: 用于服务托管和依赖注入
+- **System.Text.Json**: 高性能 JSON 序列化
 
-### 3. 性能优化策略
+### MCP 相关资源
 
-**内存管理**
-```csharp
-private List<TodoInputItem>? _input; // 懒加载初始化
-// 避免频繁的集合操作，优化大型任务列表性能
-```
+了解更多关于 Model Context Protocol 的信息：
 
-**网络请求优化**
-- 多搜索引擎的fallback机制
-- HTTP客户端复用和超时控制
-- 异步IO操作避免阻塞
+- [官方文档](https://modelcontextprotocol.io/)
+- [协议规范](https://spec.modelcontextprotocol.io/)
+- [GitHub 组织](https://github.com/modelcontextprotocol)
 
-## 未来发展方向
+### IDE 集成文档
 
-### 1. 技术架构演进
+有关配置和使用 MCP 服务器的更多信息，请参阅 VS Code 或 Visual Studio 文档：
 
-**分布式任务调度**
-- 基于Azure Service Bus的任务队列
-- 支持长时间运行任务的持久化
-- 跨节点的任务负载均衡
+- [在 VS Code 中使用 MCP 服务器 (预览)](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)
+- [在 Visual Studio 中使用 MCP 服务器 (预览)](https://learn.microsoft.com/visualstudio/ide/mcp-servers)
 
-**机器学习集成**
-- 基于历史数据的任务时间预测
-- 智能任务优先级调整
-- 个性化工作流推荐
+### 开源贡献
 
-### 2. 生态系统扩展
+欢迎为本项目贡献代码！请查看我们的 [GitHub 仓库](https://github.com/AIDotNet/MarkAgent.McpServer) 了解更多信息。
 
-**IDE集成**
-- Visual Studio扩展开发
-- VS Code插件适配
-- JetBrains Rider集成
+### 许可证
 
-**第三方工具对接**
-- Jira/Azure DevOps任务同步
-- GitHub Issues自动化管理
-- Slack/Teams消息通知集成
-
-### 3. 开源社区建设
-
-**插件生态**
-- 标准化插件开发接口
-- 社区贡献的功能模块
-- 插件市场和版本管理
-
-## 结论
-
-通过深入分析Claude Code的TODO功能并使用Semantic Kernel进行本土化实现，MarkAgents项目成功地展示了如何在.NET生态系统中构建智能的任务管理和代理系统。项目不仅实现了Claude Code的核心功能特性，还结合.NET平台的优势提供了额外的扩展性和定制化能力。
-
-这种实现方案为开发者提供了：
-- **完整的功能对等**：涵盖Claude Code的主要TODO管理特性
-- **技术栈一致性**：与现有.NET项目无缝集成
-- **可扩展架构**：支持未来功能的持续演进
-- **开源友好**：便于社区贡献和定制开发
-
-随着AI辅助编程技术的不断发展，类似MarkAgents这样的项目将为开发者提供更加智能和高效的编程体验，推动软件开发行业向更加自动化和智能化的方向发展。
-
----
-
-*本文基于MarkAgents开源项目分析撰写，项目地址：https://github.com/your-repo/MarkAgents*
-*如需了解更多技术细节，请参考项目源码和相关文档*
+本项目采用开源许可证发布。详细信息请查看项目仓库中的 LICENSE 文件。

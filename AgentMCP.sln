@@ -1,10 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{69209E0B-04F8-42F8-945E-D04A68C42796}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkAgent.McpServer", "MarkAgent.McpServer\MarkAgent.McpServer.csproj", "{1E044323-DA66-494F-A592-340BD1758D4F}"
+	ProjectSection(SolutionItems) = preProject
+		compose.yaml = compose.yaml
+		README.md = README.md
+		global.json = global.json
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkAgent.Core", "src\MarkAgent.Core\MarkAgent.Core.csproj", "{7A2C6CBC-D935-4601-8790-CAA5DAA6AC77}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DF82609D-194F-4C67-9C06-F9A9649B18BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkAgent.McpServer", "src\MarkAgent.McpServer\MarkAgent.McpServer.csproj", "{63A879A8-B418-413F-BAE9-AFD63CD11DF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,13 +19,17 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1E044323-DA66-494F-A592-340BD1758D4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E044323-DA66-494F-A592-340BD1758D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E044323-DA66-494F-A592-340BD1758D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E044323-DA66-494F-A592-340BD1758D4F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7A2C6CBC-D935-4601-8790-CAA5DAA6AC77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7A2C6CBC-D935-4601-8790-CAA5DAA6AC77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A2C6CBC-D935-4601-8790-CAA5DAA6AC77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A2C6CBC-D935-4601-8790-CAA5DAA6AC77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63A879A8-B418-413F-BAE9-AFD63CD11DF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63A879A8-B418-413F-BAE9-AFD63CD11DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63A879A8-B418-413F-BAE9-AFD63CD11DF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63A879A8-B418-413F-BAE9-AFD63CD11DF6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7A2C6CBC-D935-4601-8790-CAA5DAA6AC77} = {DF82609D-194F-4C67-9C06-F9A9649B18BB}
+		{63A879A8-B418-413F-BAE9-AFD63CD11DF6} = {DF82609D-194F-4C67-9C06-F9A9649B18BB}
 	EndGlobalSection
 EndGlobal

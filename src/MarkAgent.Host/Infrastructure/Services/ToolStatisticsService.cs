@@ -547,7 +547,7 @@ public class ToolStatisticsService : IToolStatisticsService
             SuccessRate = client.successRate,
             AverageConnectionDuration = 0, // 需要额外计算
             TotalToolUsages = 0, // 需要额外计算
-            TrendChange = 0 // TODO: 实现趋势变化计算
+            TrendChange = 0 // 实现趋势变化计算
         }).ToList();
     }
 

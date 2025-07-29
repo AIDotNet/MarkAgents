@@ -1,17 +1,6 @@
 version: '3.8'
 
 services:
-  frontend:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
-    image: markagent-frontend:latest
-    container_name: markagent-frontend
-    volumes:
-      - frontend-build:/usr/share/nginx/html
-    networks:
-      - markagent-network
-
   backend:
     build:
       context: .
@@ -21,19 +10,14 @@ services:
     ports:
       - "5157:80"
     volumes:
-      - frontend-build:/app/wwwroot:ro
       - backend-data:/app/data
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
     networks:
       - markagent-network
-    depends_on:
-      - frontend
 
 volumes:
-  frontend-build:
-    driver: local
   backend-data:
     driver: local
 

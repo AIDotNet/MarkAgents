@@ -28,8 +28,6 @@ function App() {
                 </PublicRoute>
               } 
             />
-            
-            {/* OAuth回调路由 */}
             <Route 
               path="/oauth/callback/:provider" 
               element={<OAuthCallbackPage />}
@@ -42,7 +40,7 @@ function App() {
             />
             
             {/* 受保护的管理员路由 */}
-            <Route 
+            {/* <Route 
               path="/admin" 
               element={
                 <ProtectedRoute>
@@ -53,7 +51,7 @@ function App() {
               <Route index element={<Navigate to="/admin/dashboard" replace />} />
               <Route path="dashboard" element={<DashboardPage />} />
               <Route path="api-keys" element={<ApiKeysPage />} />
-            </Route>
+            </Route> */}
 
             {/* 其他路由重定向到首页 */}
             <Route path="*" element={<Navigate to="/" replace />} />

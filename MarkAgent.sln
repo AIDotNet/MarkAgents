@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{69209E0B-04F8-42F8-945E-D04A68C42796}"
 	ProjectSection(SolutionItems) = preProject
-		compose.yaml = compose.yaml
+		docker-compose.yaml = docker-compose.yaml
 		README.md = README.md
 		global.json = global.json
 	EndProjectSection

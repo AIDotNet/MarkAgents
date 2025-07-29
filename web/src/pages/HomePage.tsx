@@ -79,7 +79,7 @@ export function HomePage() {
           </p>
           {!isAuthenticated && (
             <div className="flex justify-center space-x-4">
-              <Button size="lg" onClick={() => navigate('/login')}>
+              <Button size="lg" onClick={() => navigate('/docs/mcp-integration')}>
                 开始使用
                 <ChevronRight className="ml-2 h-5 w-5" />
               </Button>

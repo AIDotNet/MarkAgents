@@ -1,3 +1,8 @@
+namespace MarkAgent.Host.Domain.Entities;
+
+/// <summary>
+/// Todo优先级枚举
+/// </summary>
 public enum Priority
 {
     /// <summary>
@@ -13,10 +18,5 @@ public enum Priority
     /// <summary>
     /// 高优先级
     /// </summary>
-    High = 2,
-
-    /// <summary>
-    /// 紧急优先级
-    /// </summary>
-    Urgent = 3
+    High = 2
 }

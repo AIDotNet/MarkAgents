@@ -1,14 +1,14 @@
-using MarkAgent.Host.Tools;
-using MarkAgent.Host.Infrastructure.Data;
-using MarkAgent.Host.Infrastructure.Services;
-using MarkAgent.Host.Infrastructure.Repositories;
+using System.Text.Json;
+using MarkAgent.Host.Apis;
+using MarkAgent.Host.Domain.Events;
 using MarkAgent.Host.Domain.Repositories;
 using MarkAgent.Host.Domain.Services;
-using MarkAgent.Host.Domain.Events;
-using MarkAgent.Host.Apis;
+using MarkAgent.Host.Infrastructure.Data;
+using MarkAgent.Host.Infrastructure.Repositories;
+using MarkAgent.Host.Infrastructure.Services;
+using MarkAgent.Host.Tools;
 using Microsoft.EntityFrameworkCore;
 using ModelContextProtocol.Protocol;
-using ModelContextProtocol.Server;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -94,7 +94,7 @@ builder.Services
                         IpAddress = ipAddress,
                         UserAgent = userAgent,
                         ProtocolVersion = "MarkAgent/1.0",
-                        ClientCapabilities = System.Text.Json.JsonSerializer.Serialize(new
+                        ClientCapabilities = JsonSerializer.Serialize(new
                         {
                             serverOptions.ClientInfo?.Name,
                             serverOptions.ClientInfo?.Version,

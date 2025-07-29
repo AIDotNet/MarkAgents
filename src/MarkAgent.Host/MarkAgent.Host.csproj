@@ -16,6 +16,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.6" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.6" />
         <PackageReference Include="ModelContextProtocol.AspNetCore" Version="0.3.0-preview.3" />
+        <PackageReference Include="SkiaSharp" Version="3.119.0" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.6" />
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />

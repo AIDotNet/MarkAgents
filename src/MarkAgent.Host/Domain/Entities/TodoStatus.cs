@@ -1,7 +1,12 @@
+namespace MarkAgent.Host.Domain.Entities;
+
+/// <summary>
+/// Todo状态枚举
+/// </summary>
 public enum TodoStatus
 {
     /// <summary>
-    /// 待办事项
+    /// 待处理
     /// </summary>
     Pending = 0,
 

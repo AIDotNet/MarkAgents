@@ -263,12 +263,6 @@ class ApiService {
     return !!this.getAuthToken()
   }
 
-  // OAuth相关接口
-  async getOAuthProviders(): Promise<ApiResponse<OAuthProvider[]>> {
-    return this.request('/api/oauth/providers', {
-      method: 'GET',
-    }, false)
-  }
 
   async getOAuthAuthorizeUrl(provider: string, redirectUri?: string): Promise<ApiResponse<OAuthAuthorizeResponse>> {
     const params = new URLSearchParams()

@@ -8,6 +8,7 @@ import { AuthProvider, ProtectedRoute, PublicRoute } from '@/lib/auth'
 import { LoginPage } from '@/pages/LoginPage'
 import { HomePage } from '@/pages/HomePage'
 import { OAuthCallbackPage } from '@/pages/OAuthCallbackPage'
+import { MCPIntegrationPage } from '@/pages/docs/MCPIntegrationPage'
 import AdminLayout from '@/admin/layouts'
 import DashboardPage from '@/admin/pages/DashboardPage'
 import ApiKeysPage from '@/admin/pages/ApiKeysPage'
@@ -32,6 +33,12 @@ function App() {
             <Route 
               path="/oauth/callback/:provider" 
               element={<OAuthCallbackPage />}
+            />
+            
+            {/* 文档路由 */}
+            <Route 
+              path="/docs/mcp-integration" 
+              element={<MCPIntegrationPage />}
             />
             
             {/* 受保护的管理员路由 */}

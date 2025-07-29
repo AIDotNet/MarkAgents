@@ -1,12 +1,59 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="apple-touch-icon" href="/vite.svg" />
+    
+    <!-- Primary Meta Tags -->
+    <title>MarkAgent - 智能代理管理平台</title>
+    <meta name="title" content="MarkAgent - 智能代理管理平台" />
+    <meta name="description" content="MarkAgent 是一个现代化的智能代理管理平台，提供工具统计、客户端连接监控和实时数据分析功能。" />
+    <meta name="keywords" content="MarkAgent, 智能代理, 工具统计, 数据分析, 管理平台, 实时监控" />
+    <meta name="author" content="MarkAgent Team" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://markagent.example.com/" />
+    <meta property="og:title" content="MarkAgent - 智能代理管理平台" />
+    <meta property="og:description" content="MarkAgent 是一个现代化的智能代理管理平台，提供工具统计、客户端连接监控和实时数据分析功能。" />
+    <meta property="og:image" content="https://markagent.example.com/og-image.jpg" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://markagent.example.com/" />
+    <meta property="twitter:title" content="MarkAgent - 智能代理管理平台" />
+    <meta property="twitter:description" content="MarkAgent 是一个现代化的智能代理管理平台，提供工具统计、客户端连接监控和实时数据分析功能。" />
+    <meta property="twitter:image" content="https://markagent.example.com/og-image.jpg" />
+    
+    <!-- Security -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' ws: wss:;" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    
+    <!-- Performance -->
+    <meta name="theme-color" content="#000000" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    
+    <!-- PWA -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="MarkAgent" />
   </head>
   <body>
+    <noscript>
+      <div style="text-align: center; padding: 20px; font-family: Arial, sans-serif;">
+        <h1>JavaScript 已禁用</h1>
+        <p>MarkAgent 需要启用 JavaScript 才能正常运行。请在您的浏览器设置中启用 JavaScript 并刷新页面。</p>
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

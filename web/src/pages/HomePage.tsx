@@ -1,10 +1,12 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useAuth } from '@/lib/auth'
-import { ChevronRight, Bot, MessageSquare, Settings, Zap } from 'lucide-react'
+import { ChevronRight, Bot, MessageSquare, Settings, Zap, BarChart3 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { ModeToggle } from '@/components/mode-toggle'
+import { StatisticsDashboard } from '@/components/statistics/statistics-dashboard'
 
 export function HomePage() {
   const { isAuthenticated } = useAuth()
@@ -64,7 +66,7 @@ export function HomePage() {
       {/* 主要内容 */}
       <main className="container mx-auto px-4 py-16">
         {/* 英雄区域 */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <Badge variant="secondary" className="mb-4">
             基于Model Context Protocol
           </Badge>
@@ -81,15 +83,30 @@ export function HomePage() {
                 开始使用
                 <ChevronRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" onClick={() => navigate('/docs/mcp-integration')}>
                 了解更多
               </Button>
             </div>
           )}
         </div>
 
-        {/* 功能特性 */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        {/* 内容标签页 */}
+        <Tabs defaultValue="overview" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-8">
+            <TabsTrigger value="overview" className="flex items-center gap-2">
+              <Bot className="h-4 w-4" />
+              平台介绍
+            </TabsTrigger>
+            <TabsTrigger value="statistics" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              使用统计
+            </TabsTrigger>
+          </TabsList>
+
+          {/* 平台介绍标签页 */}
+          <TabsContent value="overview" className="space-y-16">
+            {/* 功能特性 */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature, index) => (
             <Card key={index} className="text-center hover:shadow-lg transition-shadow">
               <CardHeader>
@@ -187,7 +204,14 @@ export function HomePage() {
               </CardContent>
             </Card>
           </div>
-        </div>
+            </div>
+          </TabsContent>
+
+          {/* 使用统计标签页 */}
+          <TabsContent value="statistics">
+            <StatisticsDashboard />
+          </TabsContent>
+        </Tabs>
       </main>
 
       {/* 页脚 */}

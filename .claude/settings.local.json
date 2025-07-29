@@ -4,7 +4,16 @@
       "WebFetch(domain:ui.shadcn.com)",
       "Bash(npm run build:*)",
       "WebFetch(domain:cursor.com)",
-      "Bash(timeout 5 npm run dev)"
+      "Bash(timeout 5 npm run dev)",
+      "Bash(dotnet build:*)",
+      "Bash(rm:*)",
+      "Bash(npm run dev:*)",
+      "Bash(dotnet run --project src/MarkAgent.Host/MarkAgent.Host.csproj -- --version)",
+      "Bash(ls -la src/MarkAgent.Host/*.db*)",
+      "Bash(ls -la src/MarkAgent.Host/statistics.db*)",
+      "Bash(dotnet tool install --global dotnet-ef --version 9.0.0)",
+      "Bash(dotnet ef migrations list --project src/MarkAgent.Host/MarkAgent.Host.csproj --context StatisticsDbContext)",
+      "Bash(chmod +x D:codeMarkAgentsbuild-and-run.sh)"
     ],
     "deny": []
   }

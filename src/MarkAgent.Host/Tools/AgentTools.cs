@@ -3,160 +3,154 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using MarkAgent.Host.Domain.Entities;
-using MarkAgent.Host.Domain.Repositories;
-using MarkAgent.Host.Services;
 using ModelContextProtocol.Server;
+using MarkAgent.Host.Domain.Services;
+using MarkAgent.Host.Domain.Events;
 
 namespace MarkAgent.Host.Tools;
 
 [McpServerToolType]
-public class AgentTools : IAsyncDisposable
+public class AgentTools(IStatisticsChannelService statisticsChannel)
 {
-    private readonly ITodoService _todoService;
-
-    private List<TodoInputItem> _input;
-    private Conversation _conversation;
-    private readonly IConversationRepository _conversationRepository;
-
-    public AgentTools(ITodoService todoService, IConversationRepository conversationRepository)
-    {
-        _todoService = todoService;
-        _conversationRepository = conversationRepository;
-    }
+    private List<TodoInputItem>? _input;
 
     [McpServerTool, Description(Prompts.Prompts.TodoPrompt)]
-    public async Task<string> TodoWrite(
+    public string TodoWrite(
         IMcpServer mcpServer,
         [Description("The updated todo list")] TodoInputItem[] todos)
     {
-        if (_input == null)
+        var startTime = DateTime.UtcNow;
+        string? errorMessage = null;
+        bool isSuccess = true;
+
+        try
         {
-            _conversation = new Conversation()
+            if (_input == null)
             {
-                Title = "Agent Tools",
-                Status = ConversationStatus.Active,
-                Id = Guid.NewGuid(),
-                StartedAt = DateTime.Now,
-                Client = mcpServer.ClientInfo?.Name,
-                ClientVersion = mcpServer.ClientInfo?.Version,
-                SessionId = mcpServer.SessionId ?? Guid.NewGuid().ToString("N"),
-            };
-
-            await _conversationRepository.AddAsync(_conversation);
-            await _todoService.CreateTodoAsync("", _conversation.Id, todos.Select(x => new Todo()
-            {
-                ConversationId = _conversation.Id,
-                CreatedAt = DateTime.Now,
-                Content = x.Content,
-                Status = x.Status,
-                Priority = x.Priority,
-                Id = _conversation.Id + x.Id
-            }).ToList());
-
-            await _conversationRepository.SaveChangesAsync();
-
-            // 初始化TODO列表
-            _input = new List<TodoInputItem>(todos);
-            // 设置控制台编码支持UTF-8
-            Console.OutputEncoding = Encoding.UTF8;
-            Console.WriteLine();
-            Console.WriteLine("□ Initializing TODO list...");
-            // 通过控制台打印一下TODO
-            foreach (var item in todos)
-            {
-                // 根据item等级渲染不同颜色
-                if (item.Priority == Priority.High)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                }
-                else if (item.Priority == Priority.Medium)
-                {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                }
-
-                Console.Write("□ ");
-                Console.Write(item.Content);
+                // 初始化TODO列表
+                _input = new List<TodoInputItem>(todos);
+                // 设置控制台编码支持UTF-8
+                Console.OutputEncoding = Encoding.UTF8;
                 Console.WriteLine();
-
-                Console.ResetColor();
-            }
-
-            return GenerateInitialTodoMessage(todos);
-        }
-        else
-        {
-            // 添加新的TODO项
-            var newItems = todos.Where(x => _input.All(existing => existing.Id != x.Id)).ToList();
-            _input.AddRange(newItems);
-
-            if (newItems.Count > 0)
-            {
-                await _todoService.CreateTodoAsync("", _conversation.Id, newItems.Select(x => new Todo()
+                Console.WriteLine("□ Initializing TODO list...");
+                // 通过控制台打印一下TODO
+                foreach (var item in todos)
                 {
-                    Id = _conversation.Id + x.Id,
-                    ConversationId = _conversation.Id,
-                    CreatedAt = DateTime.Now,
-                    Content = x.Content,
-                    Status = x.Status,
-                    Priority = x.Priority,
-                }).ToList());
-            }
+                    // 根据item等级渲染不同颜色
+                    if (item.Priority == Priority.High)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    }
+                    else if (item.Priority == Priority.Medium)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    }
 
-            // 更新现有TODO项的状态
-            foreach (var item in _input)
-            {
-                var updatedItem = todos.FirstOrDefault(x => x.Id == item.Id);
-                if (updatedItem == null) continue;
-                item.Status = updatedItem.Status;
-                item.Content = updatedItem.Content;
-                item.Priority = updatedItem.Priority;
-
-                await _todoService.UpdateTodoAsync("", _conversation.Id + item.Id,
-                    content: item.Content,
-                    priority: item.Priority);
-            }
-
-            Console.WriteLine("□ Updating TODO list...");
-            foreach (var item in _input)
-            {
-                // 根据item等级渲染不同颜色
-                if (item.Priority == Priority.High)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                }
-                else if (item.Priority == Priority.Medium)
-                {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                }
-
-                if (item.Status == TodoStatus.Pending)
-                {
                     Console.Write("□ ");
-                }
-                else if (item.Status == TodoStatus.InProgress)
-                {
-                    Console.Write("■ ");
-                }
-                else if (item.Status == TodoStatus.Completed)
-                {
-                    Console.Write("✓ ");
+                    Console.Write(item.Content);
+                    Console.WriteLine();
+
+                    Console.ResetColor();
                 }
 
-                Console.Write(item.Content);
-                Console.WriteLine();
-                Console.ResetColor();
+                return GenerateInitialTodoMessage(todos);
             }
+            else
+            {
+                // 添加新的TODO项
+                var newItems = todos.Where(x => _input.All(existing => existing.Id != x.Id)).ToList();
+                _input.AddRange(newItems);
 
-            return GenerateUpdateTodoMessage(_input.ToArray());
+                // 更新现有TODO项的状态
+                foreach (var item in _input)
+                {
+                    var updatedItem = todos.FirstOrDefault(x => x.Id == item.Id);
+                    if (updatedItem == null) continue;
+                    item.Status = updatedItem.Status;
+                    item.Content = updatedItem.Content;
+                    item.Priority = updatedItem.Priority;
+                }
+
+                Console.WriteLine("□ Updating TODO list...");
+                foreach (var item in _input)
+                {
+                    // 根据item等级渲染不同颜色
+                    if (item.Priority == Priority.High)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    }
+                    else if (item.Priority == Priority.Medium)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    }
+
+                    if (item.Status == TodoStatus.Pending)
+                    {
+                        Console.Write("□ ");
+                    }
+                    else if (item.Status == TodoStatus.InProgress)
+                    {
+                        Console.Write("■ ");
+                    }
+                    else if (item.Status == TodoStatus.Completed)
+                    {
+                        Console.Write("✓ ");
+                    }
+
+                    Console.Write(item.Content);
+                    Console.WriteLine();
+                    Console.ResetColor();
+                }
+
+                return GenerateUpdateTodoMessage(_input.ToArray());
+            }
+        }
+        catch (Exception ex)
+        {
+            isSuccess = false;
+            errorMessage = ex.Message;
+            throw;
+        }
+        finally
+        {
+            // 记录工具使用统计
+            var endTime = DateTime.UtcNow;
+            var inputJson = JsonSerializer.Serialize(todos);
+            var sessionId = mcpServer.SessionId;
+
+            // 异步记录统计，不阻塞主流程
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    var toolUsageEvent = new ToolUsageEvent
+                    {
+                        ToolName = "TodoWrite",
+                        SessionId = sessionId ?? string.Empty,
+                        StartTime = startTime,
+                        EndTime = endTime,
+                        IsSuccess = isSuccess,
+                        ErrorMessage = errorMessage,
+                        InputSize = Encoding.UTF8.GetByteCount(inputJson),
+                        OutputSize = 0, // 输出大小在返回时计算
+                        ParametersJson = inputJson
+                    };
+
+                    await statisticsChannel.WriteToolUsageEventAsync(toolUsageEvent);
+                }
+                catch
+                {
+                    // 忽略统计记录错误，不影响主功能
+                }
+            });
         }
     }
 
@@ -218,11 +212,6 @@ public class AgentTools : IAsyncDisposable
         };
 
         return JsonSerializer.Serialize(todoItems, options);
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        await _conversationRepository.EndConversationAsync(_conversation.Id);
     }
 }
 

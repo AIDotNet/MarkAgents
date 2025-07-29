@@ -1,5 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent,  CardHeader, CardTitle } from "@/components/ui/card"
 import { 
   Bot, 
   Activity, 
@@ -50,12 +49,6 @@ export function StatisticsOverviewCards({ data, loading = false }: StatisticsOve
     if (current > average * 1.1) return <TrendingUp className="h-4 w-4 text-green-600" />
     if (current < average * 0.9) return <TrendingDown className="h-4 w-4 text-red-600" />
     return <Minus className="h-4 w-4 text-gray-600" />
-  }
-
-  const getTrendColor = (current: number, average: number) => {
-    if (current > average * 1.1) return "text-green-600"
-    if (current < average * 0.9) return "text-red-600"
-    return "text-gray-600"
   }
 
   const formatExecutionTime = (ms: number) => {

@@ -15,7 +15,6 @@ import {
   ToggleGroupItem,
 } from "@/components/ui/toggle-group"
 
-import { useIsMobile } from "@/hooks/use-mobile"
 
 interface ClientTrendDataPoint {
   date: string
@@ -33,7 +32,6 @@ interface ClientConnectionTrendChartProps {
 }
 
 export function ClientConnectionTrendChart({ data, loading = false }: ClientConnectionTrendChartProps) {
-  const isMobile = useIsMobile()
   const [timeRange, setTimeRange] = React.useState("30d")
   const [metric, setMetric] = React.useState<"connections" | "successRate" | "duration">("connections")
 

@@ -5,10 +5,6 @@ interface ApiResponse<T = any> {
   status: number
 }
 
-interface AuthTokens {
-  token: string
-}
-
 interface User {
   id: string
   email: string

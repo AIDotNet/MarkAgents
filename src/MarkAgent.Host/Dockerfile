@@ -5,11 +5,11 @@ EXPOSE 80
 EXPOSE 443
 
 # Build frontend
-FROM node:18-alpine AS frontend-build
+FROM node:23-alpine AS frontend-build
 WORKDIR /src/web
 COPY web/package*.json ./
 COPY web/bun.lock ./
-RUN npm ci --only=production
+RUN npm i
 COPY web/ .
 RUN npm run build
 

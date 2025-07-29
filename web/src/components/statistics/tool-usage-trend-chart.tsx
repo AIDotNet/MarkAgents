@@ -15,7 +15,6 @@ import {
   ToggleGroupItem,
 } from "@/components/ui/toggle-group"
 
-import { useIsMobile } from "@/hooks/use-mobile"
 
 interface TrendDataPoint {
   date: string
@@ -32,7 +31,6 @@ interface ToolUsageTrendChartProps {
 }
 
 export function ToolUsageTrendChart({ data, loading = false }: ToolUsageTrendChartProps) {
-  const isMobile = useIsMobile()
   const [timeRange, setTimeRange] = React.useState("30d")
   const [metric, setMetric] = React.useState<"usage" | "successRate" | "executionTime">("usage")
 

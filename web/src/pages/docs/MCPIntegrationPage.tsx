@@ -1,21 +1,16 @@
 import { useState, } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent,  } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Separator } from '@/components/ui/separator'
 import {
   Copy,
-  ExternalLink,
   FileText,
   CheckCircle,
-  Download,
-  Code,
   Settings,
   BookOpen,
   Sparkles,
-  ArrowRight,
-  Zap,
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
@@ -24,7 +19,7 @@ import { vscDarkPlus, oneLight } from 'react-syntax-highlighter/dist/esm/styles/
 export function MCPIntegrationPage() {
   const navigate = useNavigate()
   const [copiedStates, setCopiedStates] = useState<Record<string, boolean>>({})
-  const [isDarkMode, setIsDarkMode] = useState(
+  const [isDarkMode] = useState(
     window.matchMedia('(prefers-color-scheme: dark)').matches
   )
 
@@ -57,47 +52,6 @@ export function MCPIntegrationPage() {
   }
 }`
 
-  const steps = [
-    {
-      step: 1,
-      title: "选择你的IDE",
-      description: "根据使用的开发环境选择对应的配置方式",
-      icon: <Settings className="h-6 w-6" />,
-      color: "from-blue-500 to-blue-600"
-    },
-    {
-      step: 2,
-      title: "复制配置代码",
-      description: "复制下方提供的JSON配置到相应的配置文件中",
-      icon: <Code className="h-6 w-6" />,
-      color: "from-purple-500 to-purple-600"
-    },
-    {
-      step: 3,
-      title: "重启IDE",
-      description: "重启IDE让配置生效，开始使用MarkAgent工具",
-      icon: <Zap className="h-6 w-6" />,
-      color: "from-green-500 to-green-600"
-    }
-  ]
-
-  const features = [
-    {
-      title: "智能Todo管理",
-      description: "AI驱动的任务创建、更新和追踪",
-      icon: <CheckCircle className="h-5 w-5" />,
-    },
-    {
-      title: "实时同步",
-      description: "跨设备实时同步你的任务列表",
-      icon: <ArrowRight className="h-5 w-5" />,
-    },
-    {
-      title: "智能提醒",
-      description: "基于上下文的智能任务提醒",
-      icon: <Sparkles className="h-5 w-5" />,
-    },
-  ]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
@@ -147,7 +101,7 @@ export function MCPIntegrationPage() {
                     将以下配置添加到 Cursor 的 MCP 设置中，即可开始使用 MarkAgent 功能：
                   </p>
                 </div>
-                
+
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg blur opacity-0 transition duration-300"></div>
                   <div className="relative bg-gray-50 dark:bg-gray-900 rounded-lg overflow-hidden border">
@@ -187,7 +141,7 @@ export function MCPIntegrationPage() {
                     </SyntaxHighlighter>
                   </div>
                 </div>
-                
+
                 <div className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
                   <div className="flex items-start gap-3">
                     <div className="p-1 bg-blue-500 rounded">
@@ -210,7 +164,7 @@ export function MCPIntegrationPage() {
                     在 VS Code 中为 GitHub Copilot 配置 MCP 服务器：
                   </p>
                 </div>
-                
+
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg blur opacity-0 transition duration-300"></div>
                   <div className="relative bg-gray-50 dark:bg-gray-900 rounded-lg overflow-hidden border">
@@ -250,7 +204,7 @@ export function MCPIntegrationPage() {
                     </SyntaxHighlighter>
                   </div>
                 </div>
-                
+
                 <div className="bg-gradient-to-r from-green-50 to-emerald-100 dark:from-green-950/30 dark:to-emerald-900/30 p-6 rounded-lg border border-green-200 dark:border-green-800">
                   <div className="flex items-start gap-3">
                     <div className="p-1 bg-green-500 rounded">

@@ -6,6 +6,7 @@ import './index.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import { HomePage } from '@/pages/HomePage'
 import { MCPIntegrationPage } from '@/pages/docs/MCPIntegrationPage'
+import { ToolsPage } from '@/pages/ToolsPage'
 
 
 function App() {
@@ -16,6 +17,9 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             
+            
+            {/* 工具管理路由 */}
+            <Route path="/tools" element={<ToolsPage />} />
             
             {/* 文档路由 */}
             <Route 

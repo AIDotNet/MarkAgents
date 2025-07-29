@@ -2,10 +2,11 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ChevronRight, Bot, MessageSquare, Settings, Zap, BarChart3 } from 'lucide-react'
+import { ChevronRight, Bot, MessageSquare, Settings, Zap, BarChart3, BookOpen, ExternalLink } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { ModeToggle } from '@/components/mode-toggle'
 import { StatisticsDashboard } from '@/components/statistics/statistics-dashboard'
+import { ToolsHomepageSection } from '@/components/agent-tools/tools-homepage-section'
 
 export function HomePage() {
   const navigate = useNavigate()
@@ -34,13 +35,13 @@ export function HomePage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* 头部导航 */}
       <header className="border-b bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="h-8 w-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <Bot className="h-5 w-5 text-white" />
+            <div className="h-8 w-8 bg-gray-800 dark:bg-gray-100 rounded-lg flex items-center justify-center">
+              <Bot className="h-5 w-5 text-white dark:text-gray-800" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Mark Agent</h1>
           </div>
@@ -58,28 +59,37 @@ export function HomePage() {
             基于Model Context Protocol
           </Badge>
           <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
-            智能代理管理平台
+            AI工具管理平台
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-            Mark Agent是一个现代化的AI代理管理平台，支持MCP协议，让您轻松管理、配置和协调多个AI代理，
-            实现复杂的智能化工作流程。
+            探索和管理强大的MCP工具集合，包括思维模型、任务管理、深度思考等工具，
+            让AI助手更好地协助您解决复杂问题。
           </p>
 
-          <div className="flex justify-center space-x-4">
-            <Button size="lg" onClick={() => navigate('/docs/mcp-integration')}>
-              开始使用
-              <ChevronRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button variant="outline" size="lg" onClick={() => navigate('/docs/mcp-integration')}>
-              了解更多
-            </Button>
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <div className="flex gap-3">
+              <Button size="lg" onClick={() => navigate('/tools')}>
+                <Settings className="mr-2 h-5 w-5" />
+                工具管理
+                <ChevronRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button size="lg" variant="outline" onClick={() => navigate('/docs/mcp-integration')}>
+                <BookOpen className="mr-2 h-5 w-5" />
+                MCP 接入文档
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
           </div>
 
         </div>
 
         {/* 内容标签页 */}
-        <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-8">
+        <Tabs defaultValue="tools" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 mb-8">
+            <TabsTrigger value="tools" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              工具展示
+            </TabsTrigger>
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <Bot className="h-4 w-4" />
               平台介绍
@@ -90,15 +100,23 @@ export function HomePage() {
             </TabsTrigger>
           </TabsList>
 
+          {/* 工具展示标签页 */}
+          <TabsContent value="tools">
+            <ToolsHomepageSection 
+              onViewAll={() => navigate('/tools')} 
+              onViewDocs={() => navigate('/docs/mcp-integration')}
+            />
+          </TabsContent>
+
           {/* 平台介绍标签页 */}
           <TabsContent value="overview" className="space-y-16">
             {/* 功能特性 */}
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {features.map((feature, index) => (
-                <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+                <Card key={index} className="text-center border-gray-200 dark:border-gray-700">
                   <CardHeader>
-                    <div className="mx-auto h-12 w-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mb-4">
-                      <feature.icon className="h-6 w-6 text-white" />
+                    <div className="mx-auto h-12 w-12 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-4">
+                      <feature.icon className="h-6 w-6 text-gray-700 dark:text-gray-300" />
                     </div>
                     <CardTitle className="text-lg">{feature.title}</CardTitle>
                   </CardHeader>
@@ -125,8 +143,8 @@ export function HomePage() {
 
               <div className="grid md:grid-cols-3 gap-8">
                 <div className="text-center">
-                  <div className="h-16 w-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Settings className="h-8 w-8 text-green-600" />
+                  <div className="h-16 w-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Settings className="h-8 w-8 text-gray-600 dark:text-gray-400" />
                   </div>
                   <h4 className="text-xl font-semibold mb-2 dark:text-white">标准化接口</h4>
                   <p className="text-gray-600 dark:text-gray-300">
@@ -134,8 +152,8 @@ export function HomePage() {
                   </p>
                 </div>
                 <div className="text-center">
-                  <div className="h-16 w-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <MessageSquare className="h-8 w-8 text-blue-600" />
+                  <div className="h-16 w-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <MessageSquare className="h-8 w-8 text-gray-600 dark:text-gray-400" />
                   </div>
                   <h4 className="text-xl font-semibold mb-2 dark:text-white">安全通信</h4>
                   <p className="text-gray-600 dark:text-gray-300">
@@ -143,8 +161,8 @@ export function HomePage() {
                   </p>
                 </div>
                 <div className="text-center">
-                  <div className="h-16 w-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Zap className="h-8 w-8 text-purple-600" />
+                  <div className="h-16 w-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Zap className="h-8 w-8 text-gray-600 dark:text-gray-400" />
                   </div>
                   <h4 className="text-xl font-semibold mb-2 dark:text-white">高效协作</h4>
                   <p className="text-gray-600 dark:text-gray-300">
@@ -154,42 +172,23 @@ export function HomePage() {
               </div>
             </div>
 
-            {/* 使用场景 */}
-            <div className="text-center">
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
-                适用场景
+            {/* 快速开始 */}
+            <div className="text-center bg-gray-50 dark:bg-gray-800/50 rounded-lg p-8">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                开始使用 Mark Agent
               </h3>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <Card className="text-left">
-                  <CardHeader>
-                    <CardTitle>企业自动化</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      自动化处理企业内部流程，如数据分析、报告生成、客户服务等。
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card className="text-left">
-                  <CardHeader>
-                    <CardTitle>开发工具集成</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      与开发工具链集成，自动化代码审查、测试、部署等开发流程。
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card className="text-left">
-                  <CardHeader>
-                    <CardTitle>智能助手</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      构建能够访问多种数据源和工具的智能助手，提供全面的服务支持。
-                    </p>
-                  </CardContent>
-                </Card>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
+                Mark Agent 提供了丰富的 MCP 工具集合，帮助您构建更智能的 AI 工作流程。
+                从思维模型到任务管理，从深度思考到数据分析，一切工具触手可及。
+              </p>
+              <div className="flex justify-center space-x-4">
+                <Button size="lg" onClick={() => navigate('/tools')}>
+                  浏览所有工具
+                  <ChevronRight className="ml-2 h-5 w-5" />
+                </Button>
+                <Button variant="outline" size="lg" onClick={() => navigate('/docs/mcp-integration')}>
+                  查看文档
+                </Button>
               </div>
             </div>
           </TabsContent>

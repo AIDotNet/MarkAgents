@@ -30,6 +30,7 @@ builder.Services.AddScoped<IDailyClientStatisticsRepository, DailyClientStatisti
 
 // 注册服务
 builder.Services.AddScoped<IToolStatisticsService, ToolStatisticsService>();
+builder.Services.AddScoped<IAgentToolsReflectionService, AgentToolsReflectionService>();
 
 // 注册Channel服务 (单例)
 builder.Services.AddSingleton<StatisticsChannelService>();
@@ -167,6 +168,9 @@ app.MapMcp("/mcp");
 
 // 映射统计Channel API
 app.MapStatisticsChannelEndpoints();
+
+// 映射AgentTools API
+app.MapAgentToolsEndpoints();
 
 // SPA路由处理 - 所有未匹配的路由都返回index.html
 app.MapFallbackToFile("index.html");

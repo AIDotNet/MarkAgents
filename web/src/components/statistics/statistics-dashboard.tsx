@@ -149,16 +149,16 @@ export function StatisticsDashboard() {
         {/* 客户端统计标签页 */}
         <TabsContent value="clients" className="space-y-6">
           {/* 客户端统计说明 */}
-          <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+          <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-start gap-3">
-              <div className="h-5 w-5 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-white text-xs font-bold">i</span>
+              <div className="h-5 w-5 bg-gray-600 dark:bg-gray-400 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="text-white dark:text-gray-800 text-xs font-bold">i</span>
               </div>
               <div>
-                <h4 className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-1">
+                <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">
                   客户端统计说明
                 </h4>
-                <p className="text-sm text-blue-700 dark:text-blue-300">
+                <p className="text-sm text-gray-700 dark:text-gray-300">
                   仅统计带有有效UserAgent的客户端连接，确保数据的准确性和可靠性。
                   无UserAgent的连接不会被纳入统计分析。
                 </p>

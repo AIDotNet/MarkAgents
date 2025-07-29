@@ -8,7 +8,6 @@ EXPOSE 443
 FROM node:23-alpine AS frontend-build
 WORKDIR /src/web
 COPY web/package*.json ./
-COPY web/bun.lock ./
 RUN npm i
 COPY web/ .
 RUN npm run build

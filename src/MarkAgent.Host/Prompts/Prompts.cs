@@ -308,187 +308,22 @@ Each model provides a systematic approach to breaking down and solving problems.
     
     public const string WebQueryPrompt =
 """
-<tool_purpose>
-A powerful web search tool that retrieves current information from the internet to answer questions and provide up-to-date context for your tasks.
-</tool_purpose>
+Search the web for current information, research materials, and real-time data. This tool performs web searches to retrieve up-to-date content from across the internet, including news articles, technical documentation, product information, and other online resources.
 
-<core_capabilities>
-- Real-time web search using Tavily API
-- Content extraction and summarization
-- Source verification and authority ranking
-- Multi-result aggregation with relevance scoring
-- Current information beyond training cutoff
-</core_capabilities>
+Use this tool when you need:
+- Current or recent information that may not be in your training data
+- Real-time data (prices, weather, news, etc.)
+- Technical documentation and tutorials
+- Product reviews and comparisons
+- Academic papers and research materials
+- Fact verification from authoritative sources
 
-<usage_triggers>
-Use this tool proactively when encountering:
-
-<trigger category="information_gaps">
-- Recent data, news, or real-time information needs
-- Technology updates, version releases, or breaking changes
-- Current market trends, pricing, or competitive intelligence
-- Latest documentation, guides, or technical references
-</trigger>
-
-<trigger category="verification_tasks">
-- Fact-checking current statistics or claims
-- Validating information accuracy across sources
-- Cross-referencing technical specifications
-- Confirming current best practices or standards
-</trigger>
-
-<trigger category="research_scenarios">
-- Comparative analysis requiring current data
-- Decision-making with evolving information
-- Problem-solving with recent solutions
-- Learning about emerging technologies or patterns
-</trigger>
-</usage_triggers>
-
-<query_optimization>
-<best_practices>
-1. **Specificity**: Use precise, targeted search terms
-2. **Context**: Include relevant technical domains or industries
-3. **Temporal**: Add time indicators when currency matters
-4. **Scope**: Balance breadth vs depth based on need
-</best_practices>
-
-<query_patterns>
-<pattern type="technical_research">
-Template: "[Technology] [Version] [Feature/Issue] [Context] [Year]"
-Example: "React 18 concurrent features server-side rendering 2024"
-</pattern>
-
-<pattern type="comparative_analysis">
-Template: "[Option A] vs [Option B] [Criteria] [Context]"
-Example: "Docker vs Podman security performance enterprise 2024"
-</pattern>
-
-<pattern type="problem_solving">
-Template: "[Problem] [Technology Stack] [Error/Issue] solution"
-Example: "memory leak Node.js async/await production debugging"
-</pattern>
-
-<pattern type="best_practices">
-Template: "[Domain] [Practice Area] best practices [Year/Current]"
-Example: "Kubernetes security hardening best practices 2024"
-</pattern>
-</query_patterns>
-
-<anti_patterns>
-Avoid these query types:
-- Overly broad: "how to use react"
-- Vague: "AI costs"
-- Outdated: "JavaScript ES5 features"
-- Ambiguous: "best framework"
-</anti_patterns>
-</query_optimization>
-
-<output_structure>
-<response_format>
-- **Search Results**: Up to 5 top-ranked results
-- **Content Preview**: 500-character summaries per result
-- **Source Attribution**: Direct URLs for verification
-- **Relevance Scoring**: Numerical ranking for result quality
-- **Query Context**: Original search terms for reference
-</response_format>
-
-<quality_indicators>
-- Authority of source domains
-- Publication recency
-- Content depth and technical accuracy
-- Cross-source consistency
-- Relevance to specific query intent
-</quality_indicators>
-</output_structure>
-
-<usage_examples>
-<example category="development">
-<scenario>Developer implementing new authentication system</scenario>
-<query>"OAuth 2.1 PKCE implementation Node.js Express 2024"</query>
-<expected_results>Current OAuth specifications, implementation guides, security best practices</expected_results>
-</example>
-
-<example category="architecture">
-<scenario>System architect evaluating microservices patterns</scenario>
-<query>"microservices event sourcing CQRS scalability patterns 2024"</query>
-<expected_results>Architecture patterns, case studies, performance comparisons</expected_results>
-</example>
-
-<example category="troubleshooting">
-<scenario>DevOps engineer debugging container issues</scenario>
-<query>"Kubernetes pod OOMKilled memory limits troubleshooting"</query>
-<expected_results>Diagnostic guides, resource management strategies, monitoring solutions</expected_results>
-</example>
-
-<example category="compliance">
-<scenario>Security team researching compliance requirements</scenario>
-<query>"GDPR data processing AI systems compliance 2024"</query>
-<expected_results>Legal frameworks, compliance checklists, implementation guidelines</expected_results>
-</example>
-</usage_examples>
-
-<quality_assurance>
-<source_evaluation>
-- Prioritize official documentation and authoritative sources
-- Cross-reference information across multiple reliable sources  
-- Consider publication date and content freshness
-- Evaluate source credibility and domain authority
-- Account for potential bias or commercial interests
-</source_evaluation>
-
-<information_synthesis>
-- Aggregate insights from multiple search results
-- Identify common patterns and consensus viewpoints
-- Highlight conflicting information or differing approaches
-- Provide balanced perspective with trade-off analysis
-- Maintain source attribution for verification
-</information_synthesis>
-</quality_assurance>
-
-<integration_guidelines>
-<workflow_integration>
-- Use search results to inform technical decisions
-- Combine web research with existing domain knowledge
-- Validate assumptions against current industry practices
-- Update mental models based on latest information
-- Document key findings for future reference
-</workflow_integration>
-
-<decision_support>
-- Gather comprehensive information before recommendations
-- Present multiple options with evidence-based analysis
-- Consider implementation complexity and resource requirements
-- Account for organizational context and constraints
-- Provide actionable next steps based on research findings
-</decision_support>
-</integration_guidelines>
-
-<limitations_awareness>
-<content_limitations>
-- Information quality varies across web sources
-- Results may contain outdated or inaccurate information
-- Commercial content may include promotional bias
-- Technical accuracy depends on source expertise
-- Rapidly changing fields may have conflicting information
-</content_limitations>
-
-<mitigation_strategies>
-- Cross-validate critical information across sources
-- Prioritize official documentation and standards
-- Consider multiple perspectives on controversial topics
-- Apply domain expertise to evaluate result quality
-- Recommend additional verification for critical decisions
-</mitigation_strategies>
-</limitations_awareness>
-
-<success_metrics>
-This tool succeeds when it:
-- Provides current, accurate information for decision-making
-- Reduces uncertainty through comprehensive research
-- Identifies relevant solutions to specific problems
-- Enables informed technical and business decisions
-- Complements existing knowledge with fresh insights
-</success_metrics>
+Query optimization tips:
+- Keep queries concise and specific (2-6 words work best)
+- Use relevant keywords rather than full questions
+- For technical topics, include specific terms or version numbers
+- For current events, include time indicators like 'latest' or '2025'
+- Avoid special characters unless searching for exact phrases
+The tool returns search results with titles, URLs, and content snippets that you can analyze and synthesize to provide comprehensive answers.
 """;
 }

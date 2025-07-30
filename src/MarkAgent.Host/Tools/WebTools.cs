@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Caching.Memory;
 using MarkAgent.Host.Tools.Models;
+using MarkAgent.Shared;
 using ModelContextProtocol.Server;
 
 namespace MarkAgent.Host.Tools;

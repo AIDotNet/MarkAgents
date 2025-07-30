@@ -1,0 +1,21 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/draft/2025-07-09/server.json",
+  "description": "Mark Agent Local Server",
+  "name": "io.github.AIDotNet/MarkAgents",
+  "packages": [
+    {
+      "registry_name": "nuget",
+      "name": "MarkAgent",
+      "version": "0.1.0",
+      "package_arguments": [],
+      "environment_variables": []
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/AIDotNet/MarkAgents",
+    "source": "github"
+  },
+  "version_detail": {
+    "version": "0.1.0"
+  }
+}

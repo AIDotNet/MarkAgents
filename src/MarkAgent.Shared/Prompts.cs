@@ -1,4 +1,4 @@
-﻿namespace MarkAgent.Host;
+﻿namespace MarkAgent.Shared;
 
 /// <summary>
 /// Prompts for various tools and thinking processes used by the MarkAgent

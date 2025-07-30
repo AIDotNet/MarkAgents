@@ -25,4 +25,8 @@
       <None Remove="markagent.db" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\MarkAgent.Shared\MarkAgent.Shared.csproj" />
+    </ItemGroup>
+
 </Project>

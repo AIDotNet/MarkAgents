@@ -13,6 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DF82609D-194
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkAgent.Host", "src\MarkAgent.Host\MarkAgent.Host.csproj", "{B2811BDD-F5B2-4058-A2D4-D961B15622B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkAgent.Shared", "src\MarkAgent.Shared\MarkAgent.Shared.csproj", "{90A9A3F5-8C25-4380-88F0-8C78400A067A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkAgent.Local", "src\MarkAgent.Local\MarkAgent.Local.csproj", "{1497B556-9311-4916-8262-EB9AF29C9610}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,8 +27,18 @@ Global
 		{B2811BDD-F5B2-4058-A2D4-D961B15622B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2811BDD-F5B2-4058-A2D4-D961B15622B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2811BDD-F5B2-4058-A2D4-D961B15622B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90A9A3F5-8C25-4380-88F0-8C78400A067A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90A9A3F5-8C25-4380-88F0-8C78400A067A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90A9A3F5-8C25-4380-88F0-8C78400A067A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90A9A3F5-8C25-4380-88F0-8C78400A067A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1497B556-9311-4916-8262-EB9AF29C9610}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1497B556-9311-4916-8262-EB9AF29C9610}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1497B556-9311-4916-8262-EB9AF29C9610}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1497B556-9311-4916-8262-EB9AF29C9610}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B2811BDD-F5B2-4058-A2D4-D961B15622B4} = {DF82609D-194F-4C67-9C06-F9A9649B18BB}
+		{90A9A3F5-8C25-4380-88F0-8C78400A067A} = {DF82609D-194F-4C67-9C06-F9A9649B18BB}
+		{1497B556-9311-4916-8262-EB9AF29C9610} = {DF82609D-194F-4C67-9C06-F9A9649B18BB}
 	EndGlobalSection
 EndGlobal

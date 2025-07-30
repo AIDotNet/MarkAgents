@@ -4,8 +4,6 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using MarkAgent.Host.Domain.Entities;
-using MarkAgent.Host.Domain.Events;
-using MarkAgent.Host.Domain.Services;
 using MarkAgent.Host.Tools.Models;
 using MarkAgent.Shared;
 using ModelContextProtocol.Server;
@@ -13,7 +11,7 @@ using ModelContextProtocol.Server;
 namespace MarkAgent.Host.Tools;
 
 [McpServerToolType]
-public class AgentTools(IStatisticsChannelService statisticsChannel)
+public class AgentTools()
 {
     private readonly JsonSerializerOptions _options = new()
     {
@@ -106,7 +104,6 @@ public class AgentTools(IStatisticsChannelService statisticsChannel)
             "Your structured thought process about the problem, following the thinking framework provided in the tool description. This should be a detailed analysis that explores the problem from multiple angles.")]
         string thought)
     {
-        var startTime = DateTime.UtcNow;
         string? errorMessage = null;
         bool isSuccess = true;
 
@@ -132,39 +129,6 @@ public class AgentTools(IStatisticsChannelService statisticsChannel)
             isSuccess = false;
             errorMessage = ex.Message;
             throw;
-        }
-        finally
-        {
-            // 记录工具使用统计
-            var endTime = DateTime.UtcNow;
-            var inputJson = JsonSerializer.Serialize(new { thought });
-            var sessionId = mcpServer.SessionId;
-
-            // 异步记录统计，不阻塞主流程
-            _ = Task.Run(async () =>
-            {
-                try
-                {
-                    var toolUsageEvent = new ToolUsageEvent
-                    {
-                        ToolName = "DeepThinking",
-                        SessionId = sessionId ?? string.Empty,
-                        StartTime = startTime,
-                        EndTime = endTime,
-                        IsSuccess = isSuccess,
-                        ErrorMessage = errorMessage,
-                        InputSize = Encoding.UTF8.GetByteCount(inputJson),
-                        OutputSize = 0, // 输出大小在返回时计算
-                        ParametersJson = inputJson
-                    };
-
-                    await statisticsChannel.WriteToolUsageEventAsync(toolUsageEvent);
-                }
-                catch
-                {
-                    // 忽略统计记录错误，不影响主功能
-                }
-            });
         }
     }
 
@@ -274,28 +238,6 @@ public class AgentTools(IStatisticsChannelService statisticsChannel)
             isSuccess = false;
             errorMessage = ex.Message;
             throw;
-        }
-        finally
-        {
-            // 记录工具使用统计
-            var endTime = DateTime.UtcNow;
-            var inputJson = JsonSerializer.Serialize(todos);
-            var sessionId = mcpServer.SessionId;
-
-            var toolUsageEvent = new ToolUsageEvent
-            {
-                ToolName = "TodoWrite",
-                SessionId = sessionId ?? string.Empty,
-                StartTime = startTime,
-                EndTime = endTime,
-                IsSuccess = isSuccess,
-                ErrorMessage = errorMessage,
-                InputSize = Encoding.UTF8.GetByteCount(inputJson),
-                OutputSize = 0, // 输出大小在返回时计算
-                ParametersJson = inputJson
-            };
-
-            await statisticsChannel.WriteToolUsageEventAsync(toolUsageEvent);
         }
     }
 

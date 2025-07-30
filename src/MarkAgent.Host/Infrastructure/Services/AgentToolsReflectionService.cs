@@ -34,8 +34,9 @@ public class AgentToolsReflectionService : IAgentToolsReflectionService
         try
         {
             var agentToolsType = typeof(AgentTools);
-            var methods = agentToolsType.GetMethods(BindingFlags.Public | BindingFlags.Instance);
-
+            var methods = agentToolsType.GetMethods(BindingFlags.Public | BindingFlags.Instance).ToList();
+            var webToolType = typeof(WebTools);
+            methods.AddRange(webToolType.GetMethods(BindingFlags.Public | BindingFlags.Instance));
             foreach (var method in methods)
             {
                 // 检查是否有McpServerTool特性
@@ -81,8 +82,8 @@ public class AgentToolsReflectionService : IAgentToolsReflectionService
             var toolInfo = new McpToolInfo
             {
                 Name = method.Name,
-                IsAsync = method.ReturnType.IsGenericType && 
-                         method.ReturnType.GetGenericTypeDefinition() == typeof(Task<>)
+                IsAsync = method.ReturnType.IsGenericType &&
+                          method.ReturnType.GetGenericTypeDefinition() == typeof(Task<>)
             };
 
             // 获取描述信息
@@ -95,7 +96,7 @@ public class AgentToolsReflectionService : IAgentToolsReflectionService
             {
                 returnType = returnType.GetGenericArguments()[0];
             }
-            
+
             toolInfo.ReturnType = GetFriendlyTypeName(returnType);
             toolInfo.ReturnTypeInfo = await CreateTypeInfoAsync(returnType);
 
@@ -206,7 +207,7 @@ public class AgentToolsReflectionService : IAgentToolsReflectionService
     private List<EnumValueInfo> GetEnumValues(Type enumType)
     {
         var enumValues = new List<EnumValueInfo>();
-        
+
         foreach (var enumValue in Enum.GetValues(enumType))
         {
             var enumValueInfo = new EnumValueInfo
@@ -239,7 +240,7 @@ public class AgentToolsReflectionService : IAgentToolsReflectionService
     private List<Domain.Services.PropertyInfo> GetProperties(Type type)
     {
         var properties = new List<Domain.Services.PropertyInfo>();
-        
+
         foreach (var prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
         {
             var propInfo = new Domain.Services.PropertyInfo
@@ -288,7 +289,7 @@ public class AgentToolsReflectionService : IAgentToolsReflectionService
                 var elementType = type.GetGenericArguments()[0];
                 return $"List<{GetFriendlyTypeName(elementType)}>";
             }
-            
+
             if (genericTypeDef == typeof(Dictionary<,>))
             {
                 var keyType = type.GetGenericArguments()[0];
@@ -311,7 +312,7 @@ public class AgentToolsReflectionService : IAgentToolsReflectionService
     /// </summary>
     private bool IsComplexType(Type type)
     {
-        if (type.IsPrimitive || type == typeof(string) || type == typeof(DateTime) || 
+        if (type.IsPrimitive || type == typeof(string) || type == typeof(DateTime) ||
             type == typeof(decimal) || type.IsEnum)
         {
             return false;
@@ -352,10 +353,10 @@ public class AgentToolsReflectionService : IAgentToolsReflectionService
 
         if (name.Contains("think") || desc.Contains("think") || desc.Contains("思考"))
             return "思维工具";
-        
+
         if (name.Contains("todo") || desc.Contains("todo") || desc.Contains("任务"))
             return "任务管理";
-        
+
         if (name.Contains("mental") || name.Contains("model") || desc.Contains("model"))
             return "思维模型";
 

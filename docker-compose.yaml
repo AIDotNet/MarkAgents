@@ -1,9 +1,8 @@
 services:
-  agentmcp:
-    image: agentmcp
+
+  markagent.host:
+    image: crpi-j9ha7sxwhatgtvj4.cn-shenzhen.personal.cr.aliyuncs.com/koala-ai/mark-agent
     build:
       context: .
-      dockerfile: AgentMCP/Dockerfile
-    ports:
-        - "18183:8080"
+      dockerfile: src/MarkAgent.Host/Dockerfile
 

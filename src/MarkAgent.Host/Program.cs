@@ -16,12 +16,12 @@ var builder = WebApplication.CreateBuilder(args);
 // 添加控制器和API服务
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-
+builder.Services.AddHttpClient();
 // 配置数据库
 builder.Services.AddDbContext<StatisticsDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")
                       ?? "Data Source=statistics.db"));
-
+builder.Services.AddMemoryCache();
 // 注册仓储
 builder.Services.AddScoped<IToolUsageRepository, ToolUsageRepository>();
 builder.Services.AddScoped<IDailyToolStatisticsRepository, DailyToolStatisticsRepository>();
@@ -50,7 +50,7 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
     });
 });
-builder.Services
+var mcp = builder.Services
     .AddMcpServer((options =>
     {
         options.ServerInfo = new Implementation
@@ -62,6 +62,8 @@ builder.Services
     }))
     .WithHttpTransport(options =>
     {
+        options.Stateless = true;
+        options.PerSessionExecutionContext = true;
         options.RunSessionHandler += async (context, serverOptions, arg3) =>
         {
             try
@@ -123,6 +125,13 @@ builder.Services
     })
     .WithTools<AgentTools>();
 
+var tavilyKey = builder.Configuration["TavilyKey"];
+
+if (!string.IsNullOrEmpty(tavilyKey))
+{
+    mcp.WithTools<WebTools>();
+}
+
 var app = builder.Build();
 
 // 配置中间件管道
@@ -149,11 +158,11 @@ app.UseStaticFiles(new StaticFileOptions
         // 缓存静态文件
         var headers = ctx.Context.Response.Headers;
         var path = ctx.File.Name;
-        
+
         // 为静态资源设置缓存头
-        if (path.EndsWith(".js") || path.EndsWith(".css") || 
-            path.EndsWith(".png") || path.EndsWith(".jpg") || 
-            path.EndsWith(".jpeg") || path.EndsWith(".gif") || 
+        if (path.EndsWith(".js") || path.EndsWith(".css") ||
+            path.EndsWith(".png") || path.EndsWith(".jpg") ||
+            path.EndsWith(".jpeg") || path.EndsWith(".gif") ||
             path.EndsWith(".ico") || path.EndsWith(".svg"))
         {
             headers.Append("Cache-Control", "public,max-age=31536000");

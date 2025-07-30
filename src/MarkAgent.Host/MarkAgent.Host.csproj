@@ -5,6 +5,8 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>5ebbd81d-0da6-4bee-b813-2baa62d45516</UserSecretsId>
+        <Version>1.0.1</Version>
+        <AssemblyVersion>1.0.1</AssemblyVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,6 +19,10 @@
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.6" />
         <PackageReference Include="Scalar.AspNetCore" Version="1.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="markagent.db" />
     </ItemGroup>
 
 </Project>

@@ -14,8 +14,15 @@ namespace MarkAgent.Host.Tools;
 [McpServerToolType]
 public class AgentTools(IStatisticsChannelService statisticsChannel)
 {
+    private readonly JsonSerializerOptions _options = new()
+    {
+        WriteIndented = false,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
     [McpServerTool, Description(Prompts.MentalModelPrompt)]
-    public MentalModelData MentalModel(MentalModelName model, string problem, string[] steps,
+    public string MentalModel(MentalModelName model, string problem, string[] steps,
         string reasoning, string conclusion)
     {
         // 验证必需字段
@@ -30,18 +37,18 @@ public class AgentTools(IStatisticsChannelService statisticsChannel)
         var processedConclusion = !string.IsNullOrEmpty(conclusion) ? conclusion : "";
 
         // 创建并返回 MentalModelData 对象
-        return new MentalModelData
+        return JsonSerializer.Serialize(new MentalModelData
         {
             ModelName = model,
             Problem = problem,
             Steps = processedSteps,
             Reasoning = processedReasoning,
             Conclusion = processedConclusion
-        };
+        }, _options);
     }
 
     [McpServerTool, Description(Prompts.SequentialThinkingPrompt)]
-    public ThoughtData SequentialThinking(
+    public string SequentialThinking(
         string thought,
         int thoughtNumber,
         int totalThoughts,
@@ -76,7 +83,7 @@ public class AgentTools(IStatisticsChannelService statisticsChannel)
         var processedNeedsMoreThoughts = needsMoreThoughts;
 
         // 创建并返回 ThoughtData 对象
-        return new ThoughtData
+        return JsonSerializer.Serialize(new ThoughtData
         {
             thought = thought,
             thoughtNumber = thoughtNumber,
@@ -87,7 +94,7 @@ public class AgentTools(IStatisticsChannelService statisticsChannel)
             branchFromThought = processedBranchFromThought,
             branchId = processedBranchId,
             needsMoreThoughts = processedNeedsMoreThoughts
-        };
+        }, _options);
     }
 
 
@@ -115,11 +122,9 @@ public class AgentTools(IStatisticsChannelService statisticsChannel)
             Console.WriteLine(thought);
             Console.WriteLine("─".PadRight(50, '─'));
             Console.WriteLine();
+            Console.ResetColor();
 
-            // 构建返回给大模型的消息
-            var responseMessage = BuildThoughtResponseMessage(thought);
-
-            return responseMessage;
+            return thought;
         }
         catch (Exception ex)
         {
@@ -162,30 +167,10 @@ public class AgentTools(IStatisticsChannelService statisticsChannel)
         }
     }
 
-    private string BuildThoughtResponseMessage(string thought)
-    {
-        var sb = new StringBuilder();
-        sb.AppendLine(
-            "Deep thinking process completed successfully. Your structured analysis has been recorded and will inform future decision-making.");
-        sb.AppendLine();
-
-        sb.AppendLine("<system-reminder>");
-        sb.AppendLine(
-            "The AI has engaged in deep thinking about the current problem/requirement. Key insights from this analysis:");
-        sb.AppendLine();
-        sb.AppendLine($"Thought Process: {thought}");
-        sb.AppendLine();
-        sb.AppendLine(
-            "Use these insights to make more informed decisions and provide better solutions. The thinking process should guide your approach to the problem.");
-        sb.AppendLine("</system-reminder>");
-
-        return sb.ToString();
-    }
-
     private List<TodoInputItem>? _input;
 
     [McpServerTool, Description(Prompts.TodoPrompt)]
-    public string TodoWrite(
+    public async Task<string> TodoWrite(
         IMcpServer mcpServer,
         [Description("The updated todo list")] TodoInputItem[] todos)
     {
@@ -296,31 +281,20 @@ public class AgentTools(IStatisticsChannelService statisticsChannel)
             var inputJson = JsonSerializer.Serialize(todos);
             var sessionId = mcpServer.SessionId;
 
-            // 异步记录统计，不阻塞主流程
-            _ = Task.Run(async () =>
+            var toolUsageEvent = new ToolUsageEvent
             {
-                try
-                {
-                    var toolUsageEvent = new ToolUsageEvent
-                    {
-                        ToolName = "TodoWrite",
-                        SessionId = sessionId ?? string.Empty,
-                        StartTime = startTime,
-                        EndTime = endTime,
-                        IsSuccess = isSuccess,
-                        ErrorMessage = errorMessage,
-                        InputSize = Encoding.UTF8.GetByteCount(inputJson),
-                        OutputSize = 0, // 输出大小在返回时计算
-                        ParametersJson = inputJson
-                    };
+                ToolName = "TodoWrite",
+                SessionId = sessionId ?? string.Empty,
+                StartTime = startTime,
+                EndTime = endTime,
+                IsSuccess = isSuccess,
+                ErrorMessage = errorMessage,
+                InputSize = Encoding.UTF8.GetByteCount(inputJson),
+                OutputSize = 0, // 输出大小在返回时计算
+                ParametersJson = inputJson
+            };
 
-                    await statisticsChannel.WriteToolUsageEventAsync(toolUsageEvent);
-                }
-                catch
-                {
-                    // 忽略统计记录错误，不影响主功能
-                }
-            });
+            await statisticsChannel.WriteToolUsageEventAsync(toolUsageEvent);
         }
     }
 
@@ -374,14 +348,7 @@ public class AgentTools(IStatisticsChannelService statisticsChannel)
             id = item.Id
         }).ToList();
 
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = false,
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        };
-
-        return JsonSerializer.Serialize(todoItems, options);
+        return JsonSerializer.Serialize(todoItems, _options);
     }
 }
 

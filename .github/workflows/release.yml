@@ -1,0 +1,144 @@
+name: Build Release Packages
+
+on:
+  push:
+    tags: [ 'v*' ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  NODE_VERSION: '18'
+
+jobs:
+  build-release:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            runtime: linux-x64
+            artifact_name: mark-agent-linux-x64
+          - os: windows-latest
+            runtime: win-x64
+            artifact_name: mark-agent-windows-x64
+          - os: macos-latest
+            runtime: osx-x64
+            artifact_name: mark-agent-macos-x64
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: web/package-lock.json
+
+    - name: Install dependencies
+      run: |
+        cd web
+        npm ci
+
+    - name: Build frontend
+      run: |
+        cd web
+        npm run build
+
+    - name: Publish backend
+      run: |
+        dotnet publish src/MarkAgent.Host/MarkAgent.Host.csproj \
+          -c Release \
+          -r ${{ matrix.runtime }} \
+          --self-contained true \
+          -p:PublishSingleFile=true \
+          -p:PublishTrimmed=true \
+          -p:IncludeNativeLibrariesForSelfExtract=true \
+          -o ./publish/${{ matrix.artifact_name }}
+
+    - name: Copy frontend to publish directory
+      run: |
+        mkdir -p ./publish/${{ matrix.artifact_name }}/wwwroot
+        cp -r web/dist/* ./publish/${{ matrix.artifact_name }}/wwwroot/
+
+    - name: Create archive (Linux/macOS)
+      if: runner.os != 'Windows'
+      run: |
+        cd ./publish
+        tar -czf ${{ matrix.artifact_name }}.tar.gz ${{ matrix.artifact_name }}/
+
+    - name: Create archive (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        Compress-Archive -Path "./publish/${{ matrix.artifact_name }}/*" -DestinationPath "./publish/${{ matrix.artifact_name }}.zip"
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.artifact_name }}
+        path: ./publish/${{ matrix.artifact_name }}.*
+
+  create-release:
+    needs: build-release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: ./artifacts
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        name: Release ${{ github.ref_name }}
+        body: |
+          ## Release ${{ github.ref_name }}
+          
+          This release includes the following packages:
+          
+          - **Linux x64**: mark-agent-linux-x64.tar.gz
+          - **Windows x64**: mark-agent-windows-x64.zip
+          - **macOS x64**: mark-agent-macos-x64.tar.gz
+          
+          ## Docker Images
+          
+          Docker images are available at:
+          ```
+          crpi-j9ha7sxwhatgtvj4.cn-shenzhen.personal.cr.aliyuncs.com/koala-ai/mark-agent:${{ github.ref_name }}
+          ```
+          
+          ## Quick Start
+          
+          ### Docker
+          ```bash
+          docker run -p 8080:80 crpi-j9ha7sxwhatgtvj4.cn-shenzhen.personal.cr.aliyuncs.com/koala-ai/mark-agent:${{ github.ref_name }}
+          ```
+          
+          ### Binary
+          1. Download the appropriate package for your platform
+          2. Extract the archive
+          3. Run the executable
+        files: |
+          artifacts/mark-agent-linux-x64/mark-agent-linux-x64.tar.gz
+          artifacts/mark-agent-windows-x64/mark-agent-windows-x64.zip
+          artifacts/mark-agent-macos-x64/mark-agent-macos-x64.tar.gz
+        draft: false
+        prerelease: false
